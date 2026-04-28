@@ -1,20 +1,30 @@
 <script lang="ts">
-  import {useQuery} from '@sanity/sveltekit'
+  import type {Article} from '$lib/sanity/queries'
   import Card from '../components/Card.svelte'
-  import Welcome from '../components/Welcome.svelte'
   import type {PageProps} from './$types'
 
   const {data}: PageProps = $props()
-  const query = $derived(useQuery(data))
-  const posts = $derived($query.data)
+  const articles = $derived((data.options.initial.data ?? []) as Article[])
 </script>
 
-<section>
-  {#if posts?.length}
-    {#each posts as post}
-      <Card {post} />
+<section class="page">
+  {#if articles?.length}
+    {#each articles as article}
+      <Card {article} />
     {/each}
   {:else}
-    <Welcome />
+    <p class="empty">Ingen artikler endnu.</p>
   {/if}
 </section>
+
+<style>
+  .page {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .empty {
+    margin: 0;
+    color: #666;
+  }
+</style>

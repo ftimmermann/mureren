@@ -1,132 +1,76 @@
 <script lang="ts">
   import {formatDate} from '$lib/utils'
   import {urlFor} from '$lib/sanity/image'
-  import type {Post} from '$lib/sanity/queries'
+  import type {Article} from '$lib/sanity/queries'
 
-  export let post: Post
+  const {article}: {article: Article} = $props()
+
+  const displayDate = $derived(article.publicationDate ? formatDate(article.publicationDate) : article.legacyDate)
 </script>
 
-<a class="card" href={`/post/${post.slug.current}`}>
-  {#if post.mainImage}
+<a class="card" href={`/post/${article.slug.current}`}>
+  {#if article.mainImage}
     <img
       class="card__cover"
-      src={urlFor(post.mainImage).width(500).height(300).url()}
-      alt="Cover image for {post.title}"
+      src={urlFor(article.mainImage).width(1200).height(640).fit('crop').url()}
+      alt={article.title || ''}
     />
-  {:else}
-    <div class="card__cover--none"></div>
   {/if}
 
-  <div class="card__container">
-    <h3 class="card__title">
-      {post.title}
-    </h3>
-    {#if post.excerpt}
-      <p class="card__excerpt">{post.excerpt}</p>
+  <div class="card__content">
+    <h2 class="card__title">{article.title}</h2>
+    {#if article.subtitle}
+      <p class="card__subtitle">{article.subtitle}</p>
     {/if}
-    <p class="card__date">
-      {formatDate(post._createdAt)}
-    </p>
+    {#if displayDate}
+      <p class="card__meta">{displayDate}</p>
+    {/if}
   </div>
 </a>
 
 <style>
   .card {
-    display: flex;
-    flex-direction: column;
-    padding: var(--space-2);
-    padding: 9px;
-    position: relative;
-    border-bottom: 1px solid #ced2d9;
-    color: var(--black);
+    display: grid;
+    gap: 1rem;
+    color: inherit;
     text-decoration: none;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #ddd;
   }
 
-  .card .card__container {
-    margin: 0 var(--space-1) 0;
-  }
-
-  .card .card__cover {
+  .card__cover {
     width: 100%;
-    height: 231px;
-    -o-object-fit: cover;
+    max-height: 28rem;
     object-fit: cover;
+    display: block;
   }
 
-  .card .card__cover--none {
-    width: 100%;
-    height: 231px;
-    background: var(--black);
+  .card__content {
+    display: grid;
+    gap: 0.75rem;
   }
 
-  .card .card__title {
-    font-family: var(--font-family-sans);
-    font-weight: 800;
-    font-size: var(--font-size-7);
-    line-height: var(--line-height-6);
-    letter-spacing: -0.025em;
-    margin: var(--space-3) 0;
+  .card__title {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.2;
   }
 
-  .card .card__excerpt {
-    font-family: var(--font-family-serif);
-    font-weight: 400;
-    font-size: var(--font-size-4);
-    line-height: var(--line-height-3);
-    margin-top: 0;
+  .card__subtitle {
+    margin: 0;
+    color: #444;
+    line-height: 1.5;
   }
 
-  .card .card__date {
-    font-weight: 600;
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-1);
-    margin-top: calc(var(----space-4) + 7);
+  .card__meta {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
   }
 
-  .card:hover .card__title {
-    opacity: 0.8;
-    transition: 0.2s;
-  }
-
-  .card:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-  }
-
-  .card:last-child {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-  }
-
-  @media (min-width: 575px) {
-    .card {
-      border: 1px solid #ced2d9;
-      border-bottom: none;
-    }
-
-    .card .card__title {
-      margin-top: var(--space-4);
-    }
-
-    .card:last-child {
-      border-bottom: 1px solid #ced2d9;
-    }
-  }
-
-  @media (min-width: 800px) {
-    .card {
-      flex-direction: row;
-    }
-
-    .card .card__container {
-      margin: 0 var(--space-4) 0;
-    }
-
-    .card .card__cover,
-    .card .card__cover--none {
-      min-width: 366.5px;
-      max-width: 366.5px;
-      max-height: 231px;
+  @media (hover: hover) {
+    .card:hover .card__title {
+      text-decoration: underline;
     }
   }
 </style>

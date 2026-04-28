@@ -12,14 +12,16 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
+    "import:articles": "node --env-file=.env ./scripts/import-articles.mjs",
     "start": "sanity start"
   },
   "dependencies": {
-    "@sanity/vision": "^5.7.0",
+    "@sanity/dashboard": "^4.0.6",
+    "@sanity/vision": "^5.19.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-is": "^19.2.4",
-    "sanity": "^5.7.0",
+    "sanity": "^5.19.0",
     "styled-components": "^6.3.8"
   },
   "devDependencies": {

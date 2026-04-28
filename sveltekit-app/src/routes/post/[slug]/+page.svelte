@@ -1,139 +1,124 @@
 <script lang="ts">
-  import {useQuery} from '@sanity/sveltekit'
   import {PortableText} from '@portabletext/svelte'
+  import BodyImage from '../../../components/BodyImage.svelte'
+  import type {Article} from '$lib/sanity/queries'
   import {formatDate} from '$lib/utils'
   import {urlFor} from '$lib/sanity/image'
   import type {PageProps} from './$types'
 
   const {data}: PageProps = $props()
-  const query = $derived(useQuery(data))
-  const post = $derived($query.data)
+  const article = $derived(data.options.initial.data as Article | null)
+  const displayDate = $derived(
+    article?.publicationDate ? formatDate(article.publicationDate) : article?.legacyDate,
+  )
+
+  const components = {
+    types: {
+      image: BodyImage,
+    },
+  }
 </script>
 
-{#if post}
-  <section class="post">
-    {#if post.mainImage}
+{#if article}
+  <article class="article">
+    {#if article.mainImage}
       <img
-        class="post__cover"
-        src={urlFor(post.mainImage).url()}
-        alt="Cover image for {post.title}"
+        class="article__cover"
+        src={urlFor(article.mainImage).width(1600).url()}
+        alt={article.title || ''}
       />
-    {:else}
-      <div class="post__cover--none"></div>
     {/if}
-    <div class="post__container">
-      <h1 class="post__title">{post.title}</h1>
-      {#if post.excerpt}
-        <p class="post__excerpt">{post.excerpt}</p>
+    <div class="article__content">
+      <h1 class="article__title">{article.title}</h1>
+      {#if article.subtitle}
+        <p class="article__subtitle">{article.subtitle}</p>
       {/if}
-      <p class="post__date">
-        {formatDate(post._createdAt)}
-      </p>
-      {#if post.body}
-        <div class="post__content">
-          <PortableText components={{}} value={post.body} />
+      {#if article.author?.name || displayDate}
+        <p class="article__meta">
+          {#if article.author?.name}{article.author.name}{/if}
+          {#if article.author?.name && displayDate} · {/if}
+          {#if displayDate}{displayDate}{/if}
+        </p>
+      {/if}
+      {#if article.body}
+        <div class="article__body">
+          <PortableText {components} value={article.body} />
         </div>
       {/if}
     </div>
-  </section>
+  </article>
 {/if}
 
 <style>
-  .post {
-    width: 100%;
-    margin: var(--space-1) 0 var(--space-4);
+  .article {
+    display: grid;
+    gap: 1.5rem;
   }
 
-  .post .post__cover,
-  .post .post__cover--none {
+  .article__cover {
     width: 100%;
-    height: 200px;
-    -o-object-fit: cover;
     object-fit: cover;
+    display: block;
   }
 
-  .post .post__cover--none {
-    background: var(--black);
+  .article__content {
+    display: grid;
+    gap: 1rem;
   }
 
-  .post .post__container {
-    padding: 0 var(--space-3);
+  .article__title,
+  .article__subtitle,
+  .article__meta {
+    margin: 0;
   }
 
-  .post .post__content {
-    font-family: var(--font-family-serif);
-    font-weight: 400;
-    font-size: var(--font-size-4);
-    line-height: var(--line-height-5);
-    letter-spacing: -0.02em;
-    margin-top: var(--space-6);
+  .article__title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.05;
   }
 
-  .post .post__content :global(blockquote) {
-    border-left: 5px solid var(--black);
-    padding-left: var(--space-3);
-    margin-left: var(--space-4);
+  .article__subtitle {
+    color: #444;
+    font-size: 1.125rem;
+    line-height: 1.5;
   }
 
-  .post .post__content :global(a) {
-    color: var(--blue-600);
-    text-decoration: none;
+  .article__meta {
+    color: #666;
+    font-size: 0.95rem;
   }
 
-  .post .post__title {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-7);
-    line-height: var(--line-height-6);
-    margin: var(--space-4) 0;
-    font-weight: 800;
+  .article__body {
+    font-size: 1.0625rem;
+    line-height: 1.75;
   }
 
-  .post .post__excerpt {
-    font-family: var(--font-family-serif);
-    font-size: var(--font-size-5);
-    line-height: var(--line-height-4);
-    margin-top: 0;
-    font-weight: 400;
+  .article__body :global(p),
+  .article__body :global(blockquote) {
+    margin: 0 0 1rem;
   }
 
-  .post .post__date {
-    font-family: var(--font-family-sans);
-    font-weight: 600;
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-1);
-    line-height: var(--line-height-1);
-    margin-top: var(--space-4);
+  .article__body :global(blockquote) {
+    padding-left: 1rem;
+    border-left: 2px solid #ddd;
   }
 
-  @media (min-width: 800px) {
-    .post .post__cover,
-    .post .post__cover--none {
-      width: 750px;
-      height: 380px;
-    }
+  .article__body :global(a) {
+    color: inherit;
+  }
 
-    .post .post__title {
-      font-size: var(--font-size-10);
-      line-height: var(--line-height-10);
-      margin: var(--space-6) 0 0;
-      letter-spacing: -0.025em;
-    }
+  .article__body :global(.body-image) {
+    margin: 1.5rem 0;
+  }
 
-    .post .post__excerpt {
-      font-size: var(--font-size-5);
-      line-height: var(--line-height-5);
-      margin-top: var(--space-3);
-      margin-bottom: var(--space-3);
-    }
+  .article__body :global(.body-image img) {
+    width: 100%;
+    display: block;
+  }
 
-    .post .post__date {
-      font-size: var(--font-size-3);
-      line-height: var(--line-height-2);
-      margin-top: var(--space-0);
-    }
-
-    .post .post__content {
-      margin-top: var(--space-7);
-    }
+  .article__body :global(.body-image figcaption) {
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.95rem;
   }
 </style>

@@ -1,17 +1,65 @@
 import type {PortableTextBlock} from '@portabletext/types'
-import type {ImageAsset, Slug} from '@sanity/types'
+import type {Image, Slug} from '@sanity/types'
 import groq from 'groq'
 
-export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]`
+export const articleQuery = groq`*[_type == "article" && slug.current == $slug][0]{
+  ...,
+  author->{
+    name
+  },
+  category->{
+    name
+  },
+  tag->{
+    name
+  }
+}`
 
-export const postsQuery = groq`*[_type == "post" && defined(slug.current)] | order(_createdAt desc)`
+export const articlesQuery = groq`*[_type == "article" && defined(slug.current)] | order(coalesce(publicationDate, _createdAt) desc){
+  ...,
+  author->{
+    name
+  },
+  category->{
+    name
+  },
+  tag->{
+    name
+  }
+}`
 
-export interface Post {
-  _type: 'post'
+export const shortArticlesQuery = groq`*[_type == "shortArticle"] | order(_createdAt desc){
+  ...
+}`
+
+export interface Article {
+  _id: string
+  _type: 'article'
   _createdAt: string
+  publicationDate?: string
+  legacyDate?: string
   title?: string
   slug: Slug
-  excerpt?: string
-  mainImage?: ImageAsset
+  subtitle?: string
+  mainImage?: Image
+  author?: {
+    name?: string
+  }
+  category?: {
+    name?: string
+  }
+  tag?: {
+    name?: string
+  }
   body: PortableTextBlock[]
+}
+
+export interface ShortArticle {
+  _id: string
+  _type: 'shortArticle'
+  _createdAt: string
+  title?: string
+  excerpt?: string
+  mainImage?: Image
+  body?: PortableTextBlock[]
 }

@@ -1,7 +1,10 @@
 <script lang="ts">
   import {PortableText} from '@portabletext/svelte'
   import {browser} from '$app/environment'
+  import {afterNavigate} from '$app/navigation'
+  import {onMount} from 'svelte'
   import BodyImage from '../../components/BodyImage.svelte'
+  import PollBlock from '../../components/PollBlock.svelte'
   import type {ShortArticle} from '$lib/sanity/queries'
   import {urlFor} from '$lib/sanity/image'
   import {formatDateTime} from '$lib/utils'
@@ -13,6 +16,7 @@
   const components = {
     types: {
       image: BodyImage,
+      pollReference: PollBlock,
     },
   }
 
@@ -60,6 +64,35 @@
     targetNode.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
+    })
+  }
+
+  function shortArticleAnchor(article: ShortArticle) {
+    return `kort-nyt-${article.slug?.current ?? article._id}`
+  }
+
+  function scrollToCurrentHash() {
+    if (!browser || !window.location.hash) {
+      return
+    }
+
+    const targetId = decodeURIComponent(window.location.hash.slice(1))
+    const targetNode = document.getElementById(targetId)
+
+    if (!targetNode) {
+      return
+    }
+
+    targetNode.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+    targetNode.focus({preventScroll: true})
+  }
+
+  function scrollToCurrentHashAfterRender() {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(scrollToCurrentHash)
     })
   }
 
@@ -119,6 +152,16 @@
     activeIndex
     syncSecondaryScroll()
   })
+
+  onMount(() => {
+    scrollToCurrentHashAfterRender()
+  })
+
+  afterNavigate(({to}) => {
+    if (to?.url.pathname === '/nyheder' && to.url.hash) {
+      scrollToCurrentHashAfterRender()
+    }
+  })
 </script>
 
 <svelte:head>
@@ -135,7 +178,13 @@
     <div class="news-layout">
       <div class="news-layout__main">
         {#each articles as article, index (article._id)}
-          <article class:main-node={true} class:main-node--active={index === activeIndex} bind:this={mainNodes[index]}>
+          <article
+            id={shortArticleAnchor(article)}
+            tabindex="-1"
+            class:main-node={true}
+            class:main-node--active={index === activeIndex}
+            bind:this={mainNodes[index]}
+          >
             <div class="main-node__meta">{formatDateTime(article._createdAt)}</div>
             <h2 class="main-node__title">{article.title}</h2>
 
@@ -160,7 +209,11 @@
         {/each}
       </div>
 
-      <aside class="news-layout__secondary" aria-label="Nyhedsoversigt" bind:this={secondaryContainer}>
+      <aside
+        class="news-layout__secondary"
+        aria-label="Nyhedsoversigt"
+        bind:this={secondaryContainer}
+      >
         <div class="secondary-list">
           {#each articles as article, index (article._id)}
             <button

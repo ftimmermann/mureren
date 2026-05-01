@@ -1,0 +1,16 @@
+services:
+  polling-db:
+    image: postgres:16-alpine
+    container_name: mureren-polling-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mureren
+      POSTGRES_USER: mureren
+      POSTGRES_PASSWORD: polls
+    ports:
+      - '5433:5432'
+    volumes:
+      - polling-db-data:/var/lib/postgresql/data
+
+volumes:
+  polling-db-data:

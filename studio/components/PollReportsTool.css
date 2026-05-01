@@ -1,0 +1,271 @@
+.poll-reports-tool {
+  min-height: 100%;
+  padding: 2rem;
+  background: #f7f5f0;
+  color: #231f1a;
+}
+
+.poll-reports-tool__shell {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 72rem;
+}
+
+.poll-reports-tool__header,
+.poll-reports-tool__toolbar,
+.poll-reports-tool__result-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.poll-reports-tool__eyebrow,
+.poll-reports-tool__header h1,
+.poll-reports-tool__empty,
+.poll-reports-tool__error,
+.poll-reports-tool__notice,
+.poll-reports-tool__timeline,
+.poll-reports-tool-card__date,
+.poll-reports-tool-card h2,
+.poll-reports-tool-result p {
+  margin: 0;
+}
+
+.poll-reports-tool__eyebrow,
+.poll-reports-tool__search span {
+  color: #665f55;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.poll-reports-tool__layout {
+  display: grid;
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.poll-reports-tool__list,
+.poll-reports-tool__report,
+.poll-reports-tool-card,
+.poll-reports-tool__list-controls,
+.poll-reports-tool__summary,
+.poll-reports-tool__results,
+.poll-reports-tool-result {
+  display: grid;
+  gap: 1rem;
+}
+
+.poll-reports-tool-card,
+.poll-reports-tool__report,
+.poll-reports-tool__notice {
+  border: 1px solid #d8d1c4;
+  background: #fff;
+}
+
+.poll-reports-tool-card {
+  padding: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.poll-reports-tool-card:hover {
+  border-color: #8b6f3d;
+}
+
+.poll-reports-tool-card--active {
+  border-color: #33291c;
+  box-shadow: inset 3px 0 0 #33291c;
+}
+
+.poll-reports-tool-card h2 {
+  font-size: 1rem;
+}
+
+.poll-reports-tool-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  color: #665f55;
+  font-size: 0.8rem;
+}
+
+.poll-reports-tool-card__date,
+.poll-reports-tool__timeline {
+  color: #665f55;
+  font-size: 0.85rem;
+}
+
+.poll-reports-tool__report,
+.poll-reports-tool__notice {
+  padding: 1.25rem;
+}
+
+.poll-reports-tool__search {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.poll-reports-tool__search input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid #d8d1c4;
+  background: #fff;
+  color: #231f1a;
+  font: inherit;
+}
+
+.poll-reports-tool__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.poll-reports-tool__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  padding: 0 0.65rem;
+  border: 1px solid #d8d1c4;
+  background: #fff;
+  color: #33291c;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.poll-reports-tool__filter--active {
+  border-color: #33291c;
+  background: #33291c;
+  color: #fff;
+}
+
+.poll-reports-tool__filter span {
+  color: inherit;
+  opacity: 0.72;
+}
+
+.poll-reports-tool__status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0 0.45rem;
+  background: #ece6da;
+  color: #4f4537;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.poll-reports-tool__status--active {
+  background: #dceada;
+  color: #285c31;
+}
+
+.poll-reports-tool__status--closed,
+.poll-reports-tool__status--archived {
+  background: #e4ded3;
+  color: #5b5144;
+}
+
+.poll-reports-tool__status--draft {
+  background: #f1e5c9;
+  color: #6a4c0f;
+}
+
+.poll-reports-tool__summary {
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+}
+
+.poll-reports-tool__summary div {
+  padding: 1rem;
+  border: 1px solid #e4ded3;
+  background: #fbfaf7;
+}
+
+.poll-reports-tool__summary dt {
+  color: #665f55;
+  font-size: 0.8rem;
+}
+
+.poll-reports-tool__summary dd {
+  margin: 0.25rem 0 0;
+  font-weight: 700;
+}
+
+.poll-reports-tool__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.poll-reports-tool__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0 0.85rem;
+  border: 1px solid #33291c;
+  background: #33291c;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.poll-reports-tool__button--secondary {
+  background: #fff;
+  color: #33291c;
+}
+
+.poll-reports-tool__button:disabled {
+  border-color: #c9c1b4;
+  background: #d8d1c4;
+  color: #665f55;
+  cursor: not-allowed;
+}
+
+.poll-reports-tool-result {
+  gap: 0.35rem;
+}
+
+.poll-reports-tool-result__bar-track {
+  height: 0.75rem;
+  overflow: hidden;
+  background: #e8e0d3;
+}
+
+.poll-reports-tool-result__bar {
+  display: block;
+  width: var(--poll-result-width);
+  height: 100%;
+  background: #8b6f3d;
+}
+
+.poll-reports-tool-result p,
+.poll-reports-tool__empty {
+  color: #665f55;
+}
+
+.poll-reports-tool__error {
+  color: #9f1d1d;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .poll-reports-tool {
+    padding: 1rem;
+  }
+
+  .poll-reports-tool__layout,
+  .poll-reports-tool__header,
+  .poll-reports-tool__toolbar {
+    display: grid;
+  }
+}

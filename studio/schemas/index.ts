@@ -5,13 +5,6 @@ import author from './author'
 import category from './category'
 import tag from './tag'
 import page from './page'
+import poll from './poll'
 
-export const schemaTypes = [
-    article, 
-    author, 
-    shortArticle, 
-    blockContent,
-    category,
-    tag,
-    page,
-]
+export const schemaTypes = [article, author, shortArticle, blockContent, category, tag, page, poll]

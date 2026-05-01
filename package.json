@@ -7,7 +7,9 @@
     "studio"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace=sveltekit-app\" \"npm run dev --workspace=studio\"",
+    "db:down": "docker compose -f docker-compose.polling.yml down",
+    "db:up": "docker compose -f docker-compose.polling.yml up -d",
+    "dev": "pnpm run db:up && concurrently \"npm run dev --workspace=sveltekit-app\" \"npm run dev --workspace=studio\"",
     "format": "prettier --cache --write .",
     "postinstall": "npm --workspace sveltekit-app run prepare"
   },

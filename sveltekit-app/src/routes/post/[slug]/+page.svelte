@@ -1,6 +1,7 @@
 <script lang="ts">
   import {PortableText} from '@portabletext/svelte'
   import BodyImage from '../../../components/BodyImage.svelte'
+  import PollBlock from '../../../components/PollBlock.svelte'
   import type {Article} from '$lib/sanity/queries'
   import {formatDate} from '$lib/utils'
   import {urlFor} from '$lib/sanity/image'
@@ -15,6 +16,7 @@
   const components = {
     types: {
       image: BodyImage,
+      pollReference: PollBlock,
     },
   }
 </script>
@@ -36,7 +38,9 @@
       {#if article.author?.name || displayDate}
         <p class="article__meta">
           {#if article.author?.name}{article.author.name}{/if}
-          {#if article.author?.name && displayDate} · {/if}
+          {#if article.author?.name && displayDate}
+            ·
+          {/if}
           {#if displayDate}{displayDate}{/if}
         </p>
       {/if}

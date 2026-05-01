@@ -12,8 +12,17 @@ import {presentationTool} from 'sanity/presentation'
 
 import {schemaTypes} from './schemas'
 import DocumentEditorLayout from './components/DocumentEditorLayout'
+import PollReportsTool from './components/PollReportsTool'
 
-import {DocumentsIcon, DocumentTextIcon, DocumentIcon, UsersIcon, TagIcon, TagsIcon} from '@sanity/icons'
+import {
+  ControlsIcon,
+  DocumentsIcon,
+  DocumentTextIcon,
+  DocumentIcon,
+  UsersIcon,
+  TagIcon,
+  TagsIcon,
+} from '@sanity/icons'
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID!
 const dataset = process.env.SANITY_STUDIO_DATASET!
@@ -25,6 +34,7 @@ const deskStructure: StructureResolver = (S) =>
       S.documentTypeListItem('page').title('Sider').icon(DocumentsIcon),
       S.documentTypeListItem('article').title('Artikler').icon(DocumentTextIcon),
       S.documentTypeListItem('shortArticle').title('Kort nyt').icon(DocumentIcon),
+      S.documentTypeListItem('poll').title('Afstemninger').icon(ControlsIcon),
       S.divider(),
       S.documentTypeListItem('author').title('Skribenter').icon(UsersIcon),
       S.documentTypeListItem('category').title('Kategorier').icon(TagIcon),
@@ -57,6 +67,15 @@ export default defineConfig({
       },
     }),
     visionTool(),
+  ],
+  tools: (prev) => [
+    ...prev,
+    {
+      name: 'poll-reports',
+      title: 'Afstemningsrapporter',
+      icon: ControlsIcon,
+      component: PollReportsTool,
+    },
   ],
   schema: {
     types: schemaTypes,

@@ -45,5 +45,32 @@ export default defineType({
         }),
       ],
     }),
+    defineArrayMember({
+      name: 'pollReference',
+      title: 'Afstemning',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'poll',
+          title: 'Afstemning',
+          type: 'reference',
+          to: [{type: 'poll'}],
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+      preview: {
+        select: {
+          title: 'poll.title',
+          question: 'poll.question',
+        },
+        prepare(selection) {
+          const {question} = selection
+          return {
+            title: selection.title || 'Afstemning',
+            subtitle: question,
+          }
+        },
+      },
+    }),
   ],
 })
